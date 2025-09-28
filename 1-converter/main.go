@@ -14,9 +14,10 @@ func main() {
 
 var currencies = []string{"USD", "EUR", "RUB"}
 
-const usdEurRate = 1.3
-const usdRubRate = 89.5
-const eurRubRate = usdEurRate * usdRubRate
+var usdRates = map[string]float64{
+	"EUR": 1.3,
+	"RUB": 89.5,
+}
 
 func getUserInput() (amount float64, from string, to string) {
 	from = getCurrency("Введите исходную валюту", currencies)
@@ -60,17 +61,17 @@ func calculateRate(amount float64, from string, to string) float64 {
 
 	switch {
 	case from == "USD" && to == "EUR":
-		result = amount * usdEurRate
+		result = amount * usdRates["EUR"]
 	case from == "EUR" && to == "USD":
-		result = amount / usdEurRate
+		result = amount / usdRates["EUR"]
 	case from == "USD" && to == "RUB":
-		result = amount * usdRubRate
+		result = amount * usdRates["RUB"]
 	case from == "RUB" && to == "USD":
-		result = amount / usdRubRate
+		result = amount / usdRates["RUB"]
 	case from == "EUR" && to == "RUB":
-		result = amount * eurRubRate
+		result = amount * usdRates["EUR"] * usdRates["RUB"]
 	case from == "RUB" && to == "EUR":
-		result = amount / eurRubRate
+		result = amount / (usdRates["EUR"] * usdRates["RUB"])
 	}
 
 	return result
