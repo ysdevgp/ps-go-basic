@@ -8,17 +8,18 @@ import (
 
 func main() {
 	amount, from, to := getUserInput()
-	result := calculateRate(amount, from, to)
+
+	rates := map[string]map[string]float64{
+		"EUR": {"USD": 1.3, "RUB": 116.35},
+		"USD": {"EUR": 0.76, "RUB": 89.5},
+		"RUB": {"EUR": 1.3, "USD": 0.011},
+	}
+
+	result := calculateRate(amount, from, to, &rates)
 	fmt.Println(amount, from, " = ", result, to)
 }
 
 var currencies = []string{"USD", "EUR", "RUB"}
-
-var rates = map[string]map[string]float64{
-	"EUR": {"USD": 1.3, "RUB": 116.35},
-	"USD": {"EUR": 0.76, "RUB": 89.5},
-	"RUB": {"EUR": 1.3, "USD": 0.011},
-}
 
 func getUserInput() (amount float64, from string, to string) {
 	from = getCurrency("Введите исходную валюту", currencies)
@@ -57,6 +58,6 @@ func getAmount(text string) float64 {
 	return amount
 }
 
-func calculateRate(amount float64, from string, to string) float64 {
-	return amount * rates[from][to]
+func calculateRate(amount float64, from string, to string, rates *map[string]map[string]float64) float64 {
+	return amount * (*rates)[from][to]
 }
